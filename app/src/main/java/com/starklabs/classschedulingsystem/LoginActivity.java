@@ -2,20 +2,33 @@ package com.starklabs.classschedulingsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.StringReader;
+
 public class LoginActivity extends AppCompatActivity {
 
-    TextInputEditText username,password;
+    TextInputEditText username, password;
     MaterialButton login;
-    View v;
+    TextView error;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,17 +38,71 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.button_login);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        error = findViewById(R.id.error);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().trim().equals("") || password.getText().toString().trim().equals(""))
-                {
-                    Snackbar.make(findViewById(android.R.id.content),"None of the fields can be empty",Snackbar.LENGTH_LONG).show();
-                }
-                else
-                {
-                    
+                error.setText("");
+                if (username.getText().toString().trim().equals("") || password.getText().toString().trim().equals("")) {
+                    Snackbar.make(findViewById(android.R.id.content), "None of the fields can be empty", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Intent intent = getIntent();
+                    int type = intent.getIntExtra("Type", 0);
+                    if (type == 1) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                        String user,pass;
+                        user = username.getText().toString().trim().toLowerCase();
+                        pass = password.getText().toString().trim().toLowerCase();
+                        String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.contains("invalid")) {
+                                    error.setText("Invalid Username/Password");
+                                } else {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("Type", 1);
+                                    intent.putExtra("Course", response);
+                                    startActivity(intent);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+
+                        requestQueue.add(stringRequest);
+                    } else if (type == 2) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                        String user,pass;
+                        user = username.getText().toString().trim().toLowerCase();
+                        pass = password.getText().toString().trim().toLowerCase();
+                        String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.contains("invalid")) {
+                                    error.setText("Invalid Username/Password");
+                                } else {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("Type", 2);
+                                    startActivity(intent);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+
+                        requestQueue.add(stringRequest);
+                    } else {
+                        Snackbar.make(findViewById(android.R.id.content), "Something went wrong", Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         });
