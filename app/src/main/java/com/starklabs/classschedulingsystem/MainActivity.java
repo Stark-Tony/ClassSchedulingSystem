@@ -211,7 +211,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
-    private void putToSlot(String slotid, String profid, String status, String subjectid) {
+    private MyTextView findBySlotId(String slotid)
+    {
+        if(slotid.equals("mon1"))
+            return findViewById(R.id.mon1);
+        if(slotid.equals("mon2"))
+            return findViewById(R.id.mon2);
+        if(slotid.equals("mon3"))
+            return findViewById(R.id.mon3);
+        if(slotid.equals("mon4"))
+            return findViewById(R.id.mon4);
+        if(slotid.equals("mon5"))
+            return findViewById(R.id.mon5);
+        if(slotid.equals("mon6"))
+            return findViewById(R.id.mon6);
+        if(slotid.equals("mon7"))
+            return findViewById(R.id.mon7);
+        if(slotid.equals("mon8"))
+            return findViewById(R.id.mon8);
 
+        if(slotid.equals("tue1"))
+            return findViewById(R.id.tue1);
+        if(slotid.equals("tue2"))
+            return findViewById(R.id.tue2);
+        if(slotid.equals("tue3"))
+            return findViewById(R.id.tue3);
+        if(slotid.equals("tue4"))
+            return findViewById(R.id.tue4);
+        if(slotid.equals("tue5"))
+            return findViewById(R.id.tue5);
+        if(slotid.equals("tue6"))
+            return findViewById(R.id.tue6);
+        if(slotid.equals("tue7"))
+            return findViewById(R.id.tue7);
+        if(slotid.equals("tue8"))
+            return findViewById(R.id.tue8);
+
+        if(slotid.equals("wed1"))
+            return findViewById(R.id.wed1);
+        if(slotid.equals("wed2"))
+            return findViewById(R.id.wed2);
+        if(slotid.equals("wed3"))
+            return findViewById(R.id.wed3);
+        if(slotid.equals("wed4"))
+            return findViewById(R.id.wed4);
+        if(slotid.equals("wed5"))
+            return findViewById(R.id.wed5);
+        if(slotid.equals("wed6"))
+            return findViewById(R.id.wed6);
+        if(slotid.equals("wed7"))
+            return findViewById(R.id.wed7);
+        if(slotid.equals("wed8"))
+            return findViewById(R.id.wed8);
+
+        if(slotid.equals("thu1"))
+            return findViewById(R.id.thu1);
+        if(slotid.equals("thu2"))
+            return findViewById(R.id.thu2);
+        if(slotid.equals("thu3"))
+            return findViewById(R.id.thu3);
+        if(slotid.equals("thu4"))
+            return findViewById(R.id.thu4);
+        if(slotid.equals("thu5"))
+            return findViewById(R.id.thu5);
+        if(slotid.equals("thu6"))
+            return findViewById(R.id.thu6);
+        if(slotid.equals("thu7"))
+            return findViewById(R.id.thu7);
+        if(slotid.equals("thu8"))
+            return findViewById(R.id.thu8);
+
+        if(slotid.equals("fri1"))
+            return findViewById(R.id.fri1);
+        if(slotid.equals("fri2"))
+            return findViewById(R.id.fri2);
+        if(slotid.equals("fri3"))
+            return findViewById(R.id.fri3);
+        if(slotid.equals("fri4"))
+            return findViewById(R.id.fri4);
+        if(slotid.equals("fri5"))
+            return findViewById(R.id.fri5);
+        if(slotid.equals("fri6"))
+            return findViewById(R.id.fri6);
+        if(slotid.equals("fri7"))
+            return findViewById(R.id.fri7);
+        if(slotid.equals("fri8"))
+            return findViewById(R.id.fri8);
+
+        return null;
     }
+
 }
