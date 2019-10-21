@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (type == 1) {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
                         String user,pass;
-                        user = username.getText().toString().trim().toLowerCase();
+                        user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("Type", 1);
                                     intent.putExtra("Course", response);
+                                    intent.putExtra("profid",username.getText().toString().trim());
                                     startActivity(intent);
                                 }
                             }
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else if (type == 2) {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
                         String user,pass;
-                        user = username.getText().toString().trim().toLowerCase();
+                        user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("Type", 2);
+                                    intent.putExtra("studentid",username.getText().toString().trim());
                                     startActivity(intent);
                                 }
                             }

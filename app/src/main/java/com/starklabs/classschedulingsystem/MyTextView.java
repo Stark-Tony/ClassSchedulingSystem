@@ -18,7 +18,7 @@ public class MyTextView extends AppCompatTextView {
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,R.styleable.MyTextView,0,0);
         try {
-            status = typedArray.getInteger(R.styleable.MyTextView_status,0);
+            status = typedArray.getInteger(R.styleable.MyTextView_status,-1);
             profid = typedArray.getString(R.styleable.MyTextView_profid);
             slotid = typedArray.getString(R.styleable.MyTextView_slotid);
             subjectid = typedArray.getString(R.styleable.MyTextView_subjectid);

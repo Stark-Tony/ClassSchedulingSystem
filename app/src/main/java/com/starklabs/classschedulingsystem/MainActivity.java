@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                     wed1,wed2,wed3,wed4,wed5,wed6,wed7,wed8,thu1,thu2,thu3,thu4,thu5,thu6,thu7,thu8,
                                                     fri1,fri2,fri3,fri4,fri5,fri6,fri7,fri8;
     int sender;
+    MyTextView tempText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,24 +160,121 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
                 default:
-                    MyTextView tempText = (MyTextView)v;
-                    if(tempText.getStatus()==0)
+                    tempText = (MyTextView)v;
+                    if(tempText.getStatus()==0 && sender==1)
                     {
-                        AlertDialog.Builder isFixed = new AlertDialog.Builder(MainActivity.this);
-                        isFixed.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        AlertDialog.Builder fixedBuilder = new AlertDialog.Builder(MainActivity.this);
+                        fixedBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url="http://172.19.13.70:8080/scheduleing/Slot/Cancel/"+tempText.getSlotid()+"/"+getIntent().getStringExtra("profid")+"/";
+                                RequestQueue tempQueue = Volley.newRequestQueue(MainActivity.this);
+                                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if (response.equals("success"))
+                                        {
+                                            Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+                                            tempText.setStatus(1);
+                                            tempText.setProfid(null);
+                                            tempText.setSubjectid(null);
+                                            tempText.setText("Empty");
+                                            tempText.setBackgroundColor(getResources().getColor(R.color.colorLightPrimary,null));
+                                        }
+                                        else if(response.equals("abort"))
+                                        {
+                                            Toast.makeText(MainActivity.this, "Couldn't cancel the class", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                                tempQueue.add(stringRequest);
+                            }
+                        });
+                        fixedBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
-                        }).setMessage("Slot is already filled").create().show();
+                        });
+                        fixedBuilder.setMessage("Do you want cancel the class:"+tempText.getSubjectid()+"\n"+tempText.getProfid());
+                        fixedBuilder.create().show();
                     }
                     else if(tempText.getStatus()==2 && sender==1)
                     {
                         Toast.makeText(MainActivity.this,"Teacher+Ongoing",Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder onGoingBuilder = new AlertDialog.Builder(MainActivity.this);
+                        onGoingBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url = "http://172.19.13.70:8080/scheduleing/Slot/Cancel/"+tempText.getSlotid()+"/"+getIntent().getStringExtra("profid");
+                                RequestQueue tempQueue = Volley.newRequestQueue(MainActivity.this);
+                                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if (response.equals("success"))
+                                        {
+                                            Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+                                            tempText.setStatus(1);
+                                            tempText.setProfid(null);
+                                            tempText.setSubjectid(null);
+                                            tempText.setText("Empty");
+                                            tempText.setBackgroundColor(getResources().getColor(R.color.colorLightPrimary,null));
+
+                                        }
+                                        else if(response.equals("abort"))
+                                        {
+                                            Toast.makeText(MainActivity.this, "Couldn't cancel the request", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                                tempQueue.add(stringRequest);
+                            }
+                        });
+                        onGoingBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        onGoingBuilder.setMessage("Do you want to cancel the request:"+tempText.getSubjectid()+"\n"+tempText.getProfid());
+                        onGoingBuilder.create().show();
                     }
                     else if(tempText.getStatus()==1 && sender==1)
                     {
-                        Toast.makeText(MainActivity.this,"Teacher+Empty",Toast.LENGTH_SHORT).show();
+                        final AlertDialog.Builder request = new AlertDialog.Builder(MainActivity.this);
+                        LayoutInflater inflater2 = LayoutInflater.from(MainActivity.this);
+                        View view2 = inflater2.inflate(R.layout.input_alert,null);
+
+                        Button request_submit,request_cancel;
+                        TextInputEditText input_prof;
+                        input_prof = findViewById(R.id.input_prof);
+                        request.setView(view2);
+
+                        request.setPositiveButton("submit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url = "http://172.19.13.70:8080/scheduleing/Slot/Update/"+tempText.getSlotid()+"/"+tempText.getProfid()+"/"+tempText.getSubjectid()+"/";
+
+                            }
+                        }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        request.create().show();
+
                     }
         }
     }
@@ -184,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Toast.makeText(MainActivity.this,"Responded:"+response,Toast.LENGTH_LONG).show();
+
                 for(int i=0;i<response.length();i++)
                 {
                     try
@@ -193,7 +295,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String slotid = tempObj.getString("slotid");
                         String profid = tempObj.getString("profid");
                         String status  = tempObj.getString("status");
-
+                        String subjectid = tempObj.getString("subjectid");
+                        MyTextView myTextView = findBySlotId(slotid);
+                        if(myTextView!=null)
+                        {
+                            myTextView.setSlotid(slotid);
+                            if(status.equals("null"))
+                            {
+                                myTextView.setText("Empty");
+                                myTextView.setStatus(1);
+                                myTextView.setSubjectid(subjectid);
+                                myTextView.setProfid(profid);
+                            }
+                            else if(status.equals("ongoing"))
+                            {
+                                myTextView.setText(subjectid+"\n"+profid);
+                                myTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent,null));
+                                myTextView.setStatus(2);
+                                myTextView.setSubjectid(subjectid);
+                                myTextView.setProfid(profid);
+                            }
+                            else if(status.equals("filled"))
+                            {
+                                myTextView.setText(subjectid+"\n"+profid);
+                                myTextView.setBackgroundColor(getResources().getColor(R.color.lightYellow,null));
+                                myTextView.setStatus(0);
+                                myTextView.setSubjectid(subjectid);
+                                myTextView.setProfid(profid);
+                            }
+                        }
                     }
                     catch (JSONException e) {
                         Toast.makeText(MainActivity.this, "JSON Object Exception", Toast.LENGTH_SHORT).show();
@@ -204,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this,"Error:"+error,Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,"Error: Couldn't connect to server",Toast.LENGTH_LONG).show();
             }
         });
         requestQueue.add(jsonArrayRequest);
@@ -222,12 +352,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(slotid.equals("mon4"))
             return findViewById(R.id.mon4);
         if(slotid.equals("mon5"))
-            return findViewById(R.id.mon5);
-        if(slotid.equals("mon6"))
             return findViewById(R.id.mon6);
-        if(slotid.equals("mon7"))
+        if(slotid.equals("mon6"))
             return findViewById(R.id.mon7);
-        if(slotid.equals("mon8"))
+        if(slotid.equals("mon7"))
             return findViewById(R.id.mon8);
 
         if(slotid.equals("tue1"))
@@ -239,13 +367,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(slotid.equals("tue4"))
             return findViewById(R.id.tue4);
         if(slotid.equals("tue5"))
-            return findViewById(R.id.tue5);
-        if(slotid.equals("tue6"))
             return findViewById(R.id.tue6);
-        if(slotid.equals("tue7"))
+        if(slotid.equals("tue6"))
             return findViewById(R.id.tue7);
-        if(slotid.equals("tue8"))
+        if(slotid.equals("tue7"))
             return findViewById(R.id.tue8);
+
 
         if(slotid.equals("wed1"))
             return findViewById(R.id.wed1);
@@ -256,13 +383,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(slotid.equals("wed4"))
             return findViewById(R.id.wed4);
         if(slotid.equals("wed5"))
-            return findViewById(R.id.wed5);
-        if(slotid.equals("wed6"))
             return findViewById(R.id.wed6);
-        if(slotid.equals("wed7"))
+        if(slotid.equals("wed6"))
             return findViewById(R.id.wed7);
-        if(slotid.equals("wed8"))
+        if(slotid.equals("wed7"))
             return findViewById(R.id.wed8);
+
 
         if(slotid.equals("thu1"))
             return findViewById(R.id.thu1);
@@ -273,12 +399,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(slotid.equals("thu4"))
             return findViewById(R.id.thu4);
         if(slotid.equals("thu5"))
-            return findViewById(R.id.thu5);
-        if(slotid.equals("thu6"))
             return findViewById(R.id.thu6);
-        if(slotid.equals("thu7"))
+        if(slotid.equals("thu6"))
             return findViewById(R.id.thu7);
-        if(slotid.equals("thu8"))
+        if(slotid.equals("thu7"))
             return findViewById(R.id.thu8);
 
         if(slotid.equals("fri1"))
@@ -290,12 +414,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(slotid.equals("fri4"))
             return findViewById(R.id.fri4);
         if(slotid.equals("fri5"))
-            return findViewById(R.id.fri5);
-        if(slotid.equals("fri6"))
             return findViewById(R.id.fri6);
-        if(slotid.equals("fri7"))
+        if(slotid.equals("fri6"))
             return findViewById(R.id.fri7);
-        if(slotid.equals("fri8"))
+        if(slotid.equals("fri7"))
             return findViewById(R.id.fri8);
 
         return null;
