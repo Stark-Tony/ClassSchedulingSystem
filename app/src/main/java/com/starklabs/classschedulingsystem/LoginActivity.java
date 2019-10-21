@@ -21,8 +21,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.StringReader;
-
 public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText username, password;
@@ -53,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
                         String user,pass;
                         user = username.getText().toString().trim().toLowerCase();
-                        pass = password.getText().toString().trim().toLowerCase();
+                        pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
@@ -79,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
                         String user,pass;
                         user = username.getText().toString().trim().toLowerCase();
-                        pass = password.getText().toString().trim().toLowerCase();
+                        pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyTextView">
+        <attr name="status" format="enum">
+            <enum name="fixed" value="0"/>
+            <enum name="empty" value="1"/>
+            <enum name="ongoing" value="2"/>
+        </attr>
+        <attr name="profid" format="string"/>
+        <attr name="slotid" format="reference"/>
+        <attr name="subjectid" format="string"/>
+    </declare-styleable>
+</resources>
