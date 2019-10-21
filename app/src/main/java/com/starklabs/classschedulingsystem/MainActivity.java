@@ -3,6 +3,7 @@ package com.starklabs.classschedulingsystem;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.transition.Transition;
 
 import android.app.DownloadManager;
 import android.content.DialogInterface;
@@ -29,12 +30,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     com.starklabs.classschedulingsystem.MyTextView mon1,mon2,mon3,mon4,mon5,mon6,mon7,mon8,tue1,tue2,tue3,tue4,tue5,tue6,tue7,tue8,
                                                     wed1,wed2,wed3,wed4,wed5,wed6,wed7,wed8,thu1,thu2,thu3,thu4,thu5,thu6,thu7,thu8,
                                                     fri1,fri2,fri3,fri4,fri5,fri6,fri7,fri8;
+    int sender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sender = getIntent().getIntExtra("Type",0);
 
         mon1 = findViewById(R.id.mon1);
         mon2 = findViewById(R.id.mon2);
@@ -81,12 +84,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fri7 = findViewById(R.id.fri7);
         fri8 = findViewById(R.id.fri8);
 
-        mon5.setOnClickListener(this);
-        tue5.setOnClickListener(this);
-        wed5.setOnClickListener(this);
-        thu5.setOnClickListener(this);
-        fri5.setOnClickListener(this);
+        // Listeners are set below
 
+        mon1.setOnClickListener(this);
+        mon2.setOnClickListener(this);
+        mon3.setOnClickListener(this);
+        mon4.setOnClickListener(this);
+        mon5.setOnClickListener(this);
+        mon6.setOnClickListener(this);
+        mon7.setOnClickListener(this);
+        mon8.setOnClickListener(this);
+
+        tue1.setOnClickListener(this);
+        tue2.setOnClickListener(this);
+        tue3.setOnClickListener(this);
+        tue4.setOnClickListener(this);
+        tue5.setOnClickListener(this);
+        tue6.setOnClickListener(this);
+        tue7.setOnClickListener(this);
+        tue8.setOnClickListener(this);
+
+        wed1.setOnClickListener(this);
+        wed2.setOnClickListener(this);
+        wed3.setOnClickListener(this);
+        wed4.setOnClickListener(this);
+        wed5.setOnClickListener(this);
+        wed6.setOnClickListener(this);
+        wed7.setOnClickListener(this);
+        wed8.setOnClickListener(this);
+
+        thu1.setOnClickListener(this);
+        thu2.setOnClickListener(this);
+        thu3.setOnClickListener(this);
+        thu4.setOnClickListener(this);
+        thu5.setOnClickListener(this);
+        thu6.setOnClickListener(this);
+        thu7.setOnClickListener(this);
+        thu8.setOnClickListener(this);
+
+        fri1.setOnClickListener(this);
+        fri2.setOnClickListener(this);
+        fri3.setOnClickListener(this);
+        fri4.setOnClickListener(this);
+        fri5.setOnClickListener(this);
+        fri6.setOnClickListener(this);
+        fri7.setOnClickListener(this);
+        fri8.setOnClickListener(this);
     }
 
     @Override
@@ -110,6 +153,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.setView(view);
                 builder.create().show();
                 break;
+
+                default:
+                    MyTextView tempText = (MyTextView)v;
+                    if(tempText.getStatus()==0)
+                    {
+                        AlertDialog.Builder isFixed = new AlertDialog.Builder(MainActivity.this);
+                        isFixed.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).setMessage("Slot is already filled").create().show();
+                    }
+                    else if(tempText.getStatus()==2 && sender==1)
+                    {
+                        Toast.makeText(MainActivity.this,"Teacher+Ongoing",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(tempText.getStatus()==1 && sender==1)
+                    {
+                        Toast.makeText(MainActivity.this,"Teacher+Empty",Toast.LENGTH_SHORT).show();
+                    }
         }
     }
 
