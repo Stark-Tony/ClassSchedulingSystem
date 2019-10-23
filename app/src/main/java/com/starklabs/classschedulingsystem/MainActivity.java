@@ -255,16 +255,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         LayoutInflater inflater2 = LayoutInflater.from(MainActivity.this);
                         View view2 = inflater2.inflate(R.layout.input_alert,null);
 
-                        Button request_submit,request_cancel;
-                        TextInputEditText input_prof;
+                        final TextInputEditText input_prof;
                         input_prof = findViewById(R.id.input_prof);
                         request.setView(view2);
 
                         request.setPositiveButton("submit", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String url = "http://172.19.13.70:8080/scheduleing/Slot/Update/"+tempText.getSlotid()+"/"+tempText.getProfid()+"/"+tempText.getSubjectid()+"/";
+                                String url = "http://172.19.13.70:8080/scheduleing/Slot/Update/"+tempText.getSlotid()+"/"+getIntent().getStringExtra("profid")+"/"+input_prof.getText().toString().trim()+"/";
+                                RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if(response.equals("success"))
+                                        {
 
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Snackbar.make(findViewById(R.id.content),"Couldn't connect to server",Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                                requestQueue.add(stringRequest);
                             }
                         }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                             @Override

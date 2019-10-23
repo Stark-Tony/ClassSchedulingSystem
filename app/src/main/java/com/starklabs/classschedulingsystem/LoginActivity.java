@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                     int type = intent.getIntExtra("Type", 0);
                     if (type == 1) {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-                        String user,pass;
+                        final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
@@ -59,6 +60,13 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.contains("invalid")) {
                                     error.setText("Invalid Username/Password");
                                 } else {
+                                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("LoginInfo",0);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putBoolean("isLoggedIn",true);
+                                    editor.putString("username",user);
+                                    editor.putString("password",pass);
+                                    editor.putInt("type",1);
+                                    editor.commit();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("Type", 1);
                                     intent.putExtra("Course", response);
@@ -76,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                         requestQueue.add(stringRequest);
                     } else if (type == 2) {
                         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-                        String user,pass;
+                        final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
                         String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
@@ -86,6 +94,13 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.contains("invalid")) {
                                     error.setText("Invalid Username/Password");
                                 } else {
+                                    SharedPreferences preferences = getApplicationContext().getSharedPreferences("LoginInfo",0);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putBoolean("isLoggedIn",true);
+                                    editor.putString("username",user);
+                                    editor.putString("password",pass);
+                                    editor.putInt("type",2);
+                                    editor.commit();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("Type", 2);
                                     intent.putExtra("studentid",username.getText().toString().trim());
