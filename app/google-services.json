@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1062409086152",
+    "firebase_url": "https://classscheduler-iiita.firebaseio.com",
+    "project_id": "classscheduler-iiita",
+    "storage_bucket": "classscheduler-iiita.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062409086152:android:00e25d5da1ca991ef1b1fd",
+        "android_client_info": {
+          "package_name": "com.starklabs.classschedulingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062409086152-tms0r73drckqem8p2t174lib630nsdtc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.starklabs.classschedulingsystem",
+            "certificate_hash": "bac9f21435f50a17bd9f750c754565a99f2b8346"
+          }
+        },
+        {
+          "client_id": "1062409086152-4bebdda3rpcl7gr5g00upj7umj78dr80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjSFX7Ovtyy6RGfAjxGzlt5qb-MHfE9PQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062409086152-4bebdda3rpcl7gr5g00upj7umj78dr80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

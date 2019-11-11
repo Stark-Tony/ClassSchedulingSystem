@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ClassSchedulingSystem</string>
+    <string name="app_name">Class Scheduling System</string>
+    <string name="ip_addr">http://172.19.13.70:8080/scheduleing/</string>
 </resources>

@@ -26,6 +26,7 @@ public class FirstActivity extends AppCompatActivity {
                 Intent intent = new Intent(FirstActivity.this,LoginActivity.class);
                 intent.putExtra("Type",2);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -35,6 +36,7 @@ public class FirstActivity extends AppCompatActivity {
                 Intent intent = new Intent(FirstActivity.this, LoginActivity.class);
                 intent.putExtra("Type",1);
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                         final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
-                        String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
+                        String url = "http://172.20.38.201:8080/scheduleing/Login/Professor/" + user + "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -72,12 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("Course", response);
                                     intent.putExtra("profid",username.getText().toString().trim());
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server\n"+error, Snackbar.LENGTH_LONG).show();
                             }
                         });
 
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
-                        String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
+                        String url = "http://172.20.38.201+:8080/scheduleing/Login/Student/" +user+ "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -105,12 +106,13 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("Type", 2);
                                     intent.putExtra("studentid",username.getText().toString().trim());
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server\n"+error, Snackbar.LENGTH_LONG).show();
                             }
                         });
 

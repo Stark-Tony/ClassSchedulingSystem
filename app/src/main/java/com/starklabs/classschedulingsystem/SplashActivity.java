@@ -31,7 +31,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences("LoginInfo",0);
-                SharedPreferences.Editor editor = preferences.edit();
                 if(preferences.getBoolean("isLoggedIn",false))
                 {
                     int type = preferences.getInt("type",0);
@@ -41,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
                         final String user,pass;
                         user = preferences.getString("username",null);
                         pass = preferences.getString("password",null);
-                        String url = "http://172.19.13.70:8080/scheduleing/Login/Professor/" + user + "/" + pass;
+                        String url = "http://172.20.38.201:8080/scheduleing/Login/Professor/" + user + "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -61,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server\n"+error+"\nRestart app", Snackbar.LENGTH_LONG).show();
                             }
                         });
 
@@ -73,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
                         final String user,pass;
                         user = preferences.getString("username",null);
                         pass = preferences.getString("password",null);
-                        String url = "http://172.19.13.70:8080/scheduleing/Login/Student/" +user+ "/" + pass;
+                        String url = "http://172.20.38.201:8080/scheduleing/Login/Student/" +user+ "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -92,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(findViewById(android.R.id.content), "Error connecting the server\n"+error+"\nRestart app", Snackbar.LENGTH_LONG).show();
                             }
                         });
 
