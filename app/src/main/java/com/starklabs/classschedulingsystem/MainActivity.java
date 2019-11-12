@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,9 +30,12 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -51,21 +55,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("token:",token);
+
         sender = getIntent().getIntExtra("Type", 0);
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Topic",0);
-        if(sharedPreferences.contains("isSubscribed") && sharedPreferences.getBoolean("isSubscribed",false))
+        if(sharedPreferences.getBoolean("isSubscribed",false))
         {
-
+            Toast.makeText(MainActivity.this,"Topic:"+sharedPreferences.getBoolean("isSubscribed",false),Toast.LENGTH_SHORT).show();
         }
-        else if(sharedPreferences.contains("isSubscribed") && sharedPreferences.getBoolean("isSubscribed",false))
+        else if(!sharedPreferences.getBoolean("isSubscribed",false))
         {
             if(sender==1)
             {
-                FirebaseMessaging.getInstance().subscribeToTopic("Instructor");
+                FirebaseMessaging.getInstance().subscribeToTopic("Instructor").addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(!task.isSuccessful())
+                        {
+                            Toast.makeText(MainActivity.this,"Couldn't subscribe",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(MainActivity.this,"Subscribed Instructor",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
             else if(sender==2)
             {
-                FirebaseMessaging.getInstance().subscribeToTopic("Student");
+                FirebaseMessaging.getInstance().subscribeToTopic("Student").addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(!task.isSuccessful())
+                        {
+                            Toast.makeText(MainActivity.this,"Couldn't subscribe",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(MainActivity.this,"Subscribed Student",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isSubscribed",true);
@@ -193,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fixedBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://172.20.38.201:8080/scheduleing/Slot/Cancel/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid") + "/";
+                            String url = "http://192.168.43.242:8080/scheduleing/Slot/Cancel/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid") + "/";
                             RequestQueue tempQueue = Volley.newRequestQueue(MainActivity.this);
                             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                 @Override
@@ -231,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     onGoingBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://172.20.38.201:8080/scheduleing/Slot/Cancel/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid");
+                            String url = "http://192.168.43.242:8080/scheduleing/Slot/Cancel/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid");
                             RequestQueue tempQueue = Volley.newRequestQueue(MainActivity.this);
                             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                 @Override
@@ -280,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (course.equals("") || course == null) {
                                 Toast.makeText(MainActivity.this, "Course ID can't be empty", Toast.LENGTH_SHORT).show();
                             } else {
-                                String url = "http://172.20.38.201:8080/scheduleing/Slot/Update/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid") + "/" + course + "/";
+                                String url = "http://192.168.43.242:8080/scheduleing/Slot/Update/" + tempText.getSlotid() + "/" + getIntent().getStringExtra("profid") + "/" + course + "/";
                                 RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
                                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                     @Override
@@ -321,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     forVote.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://172.20.38.201:8080/scheduleing/Vote/Post/" + getIntent().getStringExtra("studentid") + "/" + tempText.getSlotid() + "/yes/";
+                            String url = "http://192.168.43.242:8080/scheduleing/Vote/Post/" + getIntent().getStringExtra("studentid") + "/" + tempText.getSlotid() + "/yes/";
                             RequestQueue studentVoteQueue = Volley.newRequestQueue(MainActivity.this);
                             StringRequest voteRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                 @Override
@@ -344,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     forVote.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String url = "http://172.20.38.201:8080/scheduleing/Vote/Post/" + getIntent().getStringExtra("studentid") + "/" + tempText.getSlotid() + "/no/";
+                            String url = "http://192.168.43.242:8080/scheduleing/Vote/Post/" + getIntent().getStringExtra("studentid") + "/" + tempText.getSlotid() + "/no/";
                             RequestQueue studentVoteQueue = Volley.newRequestQueue(MainActivity.this);
                             StringRequest voteRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                                 @Override
@@ -372,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-        String url = "http://172.20.38.201:8080/scheduleing/Slot/Get/";
+        String url = "http://192.168.43.242:8080/scheduleing/Slot/Get/";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -526,7 +557,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         }
+        if (item.getItemId() == R.id.profile)
+        {
+            Intent intent = new Intent(this,ProfileActivity.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.instruction)
+        {
 
+        }
+        if (item.getItemId() == R.id.about)
+        {
+
+        }
         return super.onOptionsItemSelected(item);
     }
 

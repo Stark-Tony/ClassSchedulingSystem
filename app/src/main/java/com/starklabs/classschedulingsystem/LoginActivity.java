@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                         final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
-                        String url = "http://172.20.38.201:8080/scheduleing/Login/Professor/" + user + "/" + pass;
+                        String url = "http://192.168.43.242:8080/scheduleing/Login/Professor/" + user + "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         final String user,pass;
                         user = username.getText().toString().trim();
                         pass = password.getText().toString().trim();
-                        String url = "http://172.20.38.201+:8080/scheduleing/Login/Student/" +user+ "/" + pass;
+                        String url = "http://192.168.43.242:8080/scheduleing/Login/Student/" +user+ "/" + pass;
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
