@@ -60,14 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         sender = getIntent().getIntExtra("Type", 0);
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Topic",0);
-        if(sharedPreferences.getBoolean("isSubscribed",false))
+        if(sender==1 && sharedPreferences.getBoolean("isInstructorSubscribed",false))
         {
-            Toast.makeText(MainActivity.this,"Topic:"+sharedPreferences.getBoolean("isSubscribed",false),Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,"Topic:"+sharedPreferences.getBoolean("isInstructorSubscribed",false),Toast.LENGTH_SHORT).show();
         }
-        else if(!sharedPreferences.getBoolean("isSubscribed",false))
+        else if(sender==1 && !sharedPreferences.getBoolean("isInstructorSubscribed",false))
         {
-            if(sender==1)
-            {
                 FirebaseMessaging.getInstance().subscribeToTopic("Instructor").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -81,28 +79,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-            }
-            else if(sender==2)
-            {
-                FirebaseMessaging.getInstance().subscribeToTopic("Student").addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(!task.isSuccessful())
-                        {
-                            Toast.makeText(MainActivity.this,"Couldn't subscribe",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(MainActivity.this,"Subscribed Student",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isSubscribed",true);
+            editor.putBoolean("isInstructorSubscribed",true);
             editor.commit();
         }
-
+        if(sender==2 && sharedPreferences.getBoolean("isStudentSubscribed",false))
+        {
+            Toast.makeText(MainActivity.this,"Topic:"+sharedPreferences.getBoolean("isStudentSubscribed",false),Toast.LENGTH_SHORT).show();
+        }
+        else if(sender==2 && !sharedPreferences.getBoolean("isStudentSubscribed",false))
+        {
+            FirebaseMessaging.getInstance().subscribeToTopic("Student").addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(!task.isSuccessful())
+                    {
+                        Toast.makeText(MainActivity.this,"Couldn't subscribe",Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(MainActivity.this,"Subscribed Student",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isStudentSubscribed",true);
+            editor.commit();
+        }
         mon1 = findViewById(R.id.mon1);
         mon2 = findViewById(R.id.mon2);
         mon3 = findViewById(R.id.mon3);
@@ -234,8 +237,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         tempText.setStatus(1);
                                         tempText.setProfid(null);
                                         tempText.setSubjectid(null);
-                                        tempText.setText("Empty");
                                         tempText.setBackgroundColor(getResources().getColor(R.color.colorLightPrimary, null));
+                                        tempText.setText("Empty");
                                     } else if (response.equals("abort")) {
                                         Toast.makeText(MainActivity.this, "Couldn't cancel the class", Toast.LENGTH_SHORT).show();
                                     }
@@ -272,9 +275,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         tempText.setStatus(1);
                                         tempText.setProfid(null);
                                         tempText.setSubjectid(null);
-                                        tempText.setText("Empty");
                                         tempText.setBackgroundColor(getResources().getColor(R.color.colorLightPrimary, null));
-
+                                        tempText.setText("Empty");
                                     } else if (response.equals("abort")) {
                                         Toast.makeText(MainActivity.this, "Couldn't cancel the request", Toast.LENGTH_SHORT).show();
                                     }
@@ -557,18 +559,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         }
-        if (item.getItemId() == R.id.profile)
-        {
-            Intent intent = new Intent(this,ProfileActivity.class);
-            startActivity(intent);
-        }
         if (item.getItemId() == R.id.instruction)
         {
-
+            Intent intent = new Intent(this,InstructionActivity.class);
+            startActivity(intent);
         }
         if (item.getItemId() == R.id.about)
         {
-
+            Intent intent = new Intent(this,AboutActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,4 +1,29 @@
 <resources>
     <string name="app_name">Class Scheduling System</string>
     <string name="ip_addr">http://172.19.13.70:8080/scheduleing/</string>
+    <string name="about">Class Scheduler App is an Android application to facilitate the scheduling of classes within an academic institute.\n
+        The instructors can easily schedule extra classes in the free slots and can cancel the already scheduled classes.\n
+        The students are given a facility to vote for the class that has been proposed to be scheduled by the instructors. Based on the student votes, decisions of classes being scheduled or ignored are taken.
+        The notifications are sent to the students and instructors about the upcoming classes before 2 hrs of the class time.
+    </string>
+    <string name="instructions_for_instructor">
+        Color Coding:-\n
+        pale yellow - scheduled classes\n
+        green - classes in process of being scheduled\n
+        blue - empty classes\n\n
+        You can schedule a class on an empty slot. For doing so, simply click on the slot. A popup appears which asks for subject id of subject taught by you. Enter the info and click submit. Rest is done by the app. You will notice the changes.\n\n
+        To cancel the fixed class, simply click on the slot (yellow colored) and select yes in the dialog that appears. Class will be canceled.\n\n
+        To cancel the class that is in process of being scheduled (green colored) follow the same procedure as for fixed class.\n\n
+        You can only cancel your own classes and can only schedule your own classes. Classes can not be scheduled during break time or on the fixed slots.\n\n
+        Carefully read the notifications and information written on screen or popped to you via dialog, toasts and snackbars.
+
+    </string>
+    <string name="instructions_for_student">
+        Color Coding:-\n
+        Same as instructors\n\n
+        You can only vote on the classes that are in process of being scheduled (green colored).\n\n
+        You can vote once per green colored slot, so choose you vote wisely.\n\n
+        To vote, click on the slot and select yes or no as your vote when dialog appears.\n\n
+        Carefully read the notifications and information written on screen or popped to you via dialog, toasts and snackbars.
+    </string>
 </resources>

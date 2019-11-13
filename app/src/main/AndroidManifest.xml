@@ -9,21 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".InstructionActivity" />
         <activity android:name=".SplashActivity">
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".FirstActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity
-            android:name=".FirstActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
-        <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <service android:name=".MessagingService">
             <intent-filter>
